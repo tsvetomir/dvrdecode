@@ -24,10 +24,26 @@ File.open(ARGV[0], 'rb') do |file|
 
             if stream_start != nil && stream_end > stream_start
                 file.seek(stream_start)
-                stream = file.read([0, stream_end - stream_start - 4].max)
+                header = file.read(30).unpack('n*')
+                file.seek(-30, IO::SEEK_CUR)
 
-                File.open("cam#{camera_id}.dav", 'ab') do |out_file|
-                    out_file.write(stream)
+                #seq = '%05d' % header[0]
+
+                file_name = "cam#{camera_id}.dav"
+                if (header[13] == 1 && header[14] == 0x6742) # SPS
+                    if !File.exist? file_name
+                        File.open(file_name, 'wb')
+                    end
+                    file.seek(24, IO::SEEK_CUR)
+                else
+                    file.seek(16, IO::SEEK_CUR)
+                end
+
+                if File.exist? file_name
+                    stream = file.read(stream_end - file.pos)
+                    File.open("cam#{camera_id}.dav", 'ab') do |out_file|
+                        out_file.write(stream)
+                    end
                 end
             end
 
