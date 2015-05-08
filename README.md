@@ -12,33 +12,26 @@ At this point I had to put my detective hat on. Challenge accepted.
 
 ## Obtaining raw data
 
-The first step was to image the HDD using dd:
+The disk layout consists of two partitions.
 
-    dd if=/dev/sda of=dvr.hdd bs=128k
+    Disk /dev/sdd: 232,9 GiB, 250059350016 bytes, 488397168 sectors
+    Units: sectors of 1 * 512 = 512 bytes
+    Sector size (logical/physical): 512 bytes / 512 bytes
+    I/O size (minimum/optimal): 512 bytes / 512 bytes
+    Disklabel type: dos
+    Disk identifier: 0x00000000
 
-Let's see what's in there:
-
-    sudo losetup /dev/loop0 dvr.hdd
-    sudo /sbin/fdisk -lu /dev/loop0                                                                                                                                                                          ~ --
-
-        Disk /dev/loop0: 232,9 GiB, 250059350016 bytes, 488397168 sectors
-        Units: sectors of 1 * 512 = 512 bytes
-        Sector size (logical/physical): 512 bytes / 512 bytes
-        I/O size (minimum/optimal): 512 bytes / 512 bytes
-        Disklabel type: dos
-        Disk identifier: 0x8a556dae
-
-        Device       Boot   Start       End   Sectors  Size Id Type
-        /dev/loop0p1           63   6008309   6008247  2,9G  c W95 FAT32 (LBA)
-        /dev/loop0p2      6008310 488392064 482383755  230G 83 Linux
+    Device     Boot   Start       End   Sectors  Size Id Type
+    /dev/sdd1            63   6008309   6008247  2,9G  c W95 FAT32 (LBA)
+    /dev/sdd2       6008310 488392064 482383755  230G 83 Linux
 
 The raw video data is located on the second, larger partition.
+
 I didn't bother to look at the first partition at this point.
 
-We can move on and extract the data partition into a separate file.
+Lets image the HDD using dd:
 
-    sudo losetup /dev/loop1 dvr.hdd -o $((6008310 * 512))
-    dd if=/dev/loop1 of=dvr.data bs=128k
+    dd if=/dev/sdd2 of=dvr.raw bs=128k
 
 ## Analysis
 
