@@ -1,0 +1,4 @@
+[package]
+name = "dvrdecode"
+version = "0.1.0"
+authors = ["Tsvetomir Tsonev <cvetomirconev@gmail.com>"]
