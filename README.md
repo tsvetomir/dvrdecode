@@ -51,7 +51,7 @@ This is how a block looks like:
 It contains a preamble of sorts that I'm not able to decode at this point.
 What follow is a H.264 [Network Abstraction Layer (NAL) unit](http://en.wikipedia.org/wiki/Network_Abstraction_Layer).
 
-Let's fire up [h264_analyze](https://github.com/aizvorski/h264bitstream) to find out what's lurking in there.
+Let's fire up [h264_analyze](https://github.com/tsvetomir/h264bitstream) to find out what's lurking in there.
 
     !! Found NAL at offset 127116 (0x1F08C), size 9 (0x0009)
     0.8: forbidden_zero_bit: 0
